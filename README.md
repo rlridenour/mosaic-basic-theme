@@ -91,11 +91,17 @@ palettes remain available as `m.palettes`.
 ### The title slide's logo
 
 The title page is a two-column grid — text in the left 60%, an optional
-logo centered in the right 40%. Give it one on `setup`:
+logo centered in the right 40%. Two logos ship with the theme, so a talk
+needs no copy of its own beside it:
 
 ```typ
-#show: m.setup.with(logo: image("logos/univ.png", width: 90%), ..)
+#show: m.setup.with(logo: m.univ-logo(), ..)    // OBU
+#show: m.setup.with(logo: m.school-logo(), ..)  // OBU School of Theology
 ```
+
+Both take a `width`, defaulting to `90%`. Any other image works the same
+way — `logo: image("logos/mine.png", width: 90%)`, resolved against the
+deck.
 
 Left alone the half is empty and the text simply keeps the left 60%,
 which is what the Beamer theme does without a logo.
@@ -104,7 +110,7 @@ Setting it per slide works too, and is what you want if a deck has more
 than one title slide:
 
 ```typ
-#m.slide(layout: "title", cells: (title-logo: image("logos/univ.png", width: 90%)))
+#m.slide(layout: "title", cells: (title-logo: m.univ-logo()))
 ```
 
 Note that `cells:` does **not** work for this on `setup`. A deck's
@@ -151,7 +157,7 @@ omit `#+MOSAIC_THEME:`, which selects a *bundled* Mosaic facade:
 #+AUTHOR: Randy Ridenour
 #+MOSAIC_PACKAGE: @local/mosaic-basic-theme:0.1.0
 #+MOSAIC_COLORS: m.variants.obu
-#+MOSAIC_SETUP: logo: image("logos/univ.png", width: 90%)
+#+MOSAIC_SETUP: logo: m.univ-logo()
 ```
 
 `#+MOSAIC_SETUP:` passes an argument straight to `setup`, which is how
@@ -200,6 +206,8 @@ This theme matches the **output**, since that is what a replica is for.
     title page.
   - `layouts.typ` — the callable layout namespace.
   - `tokens.typ` — the four variant palettes.
+  - `logos/` — the bundled logos, reached with `m.univ-logo()` and
+    `m.school-logo()`.
 - `examples/demo.typ` — a deck exercising the theme.
 
 ## Differences from the Touying theme

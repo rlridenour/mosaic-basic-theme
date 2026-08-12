@@ -11,3 +11,12 @@
 #import "tokens.typ": variants
 
 #let setup = mosaic.themes.setup(definition)
+
+/// The "univ" logo bundled with the theme, for `setup(logo: univ-logo())`.
+///
+/// The path is resolved where it is written -- here, inside the package -- so
+/// a deck reaches these without keeping a copy of its own beside every talk.
+#let univ-logo(width: 90%) = image("logos/univ.png", width: width)
+
+/// The "school" logo bundled with the theme, for `setup(logo: school-logo())`.
+#let school-logo(width: 90%) = image("logos/school.png", width: width)

@@ -12,6 +12,7 @@
   subtitle: [Mosaic, in the Beamer basicwhite voice],
   authors: [Randy Ridenour],
   date: [August 1, 2026],
+  logo: m.univ-logo(),
 )
 
 #m.slide(layout: "title")
