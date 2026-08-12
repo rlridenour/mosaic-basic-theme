@@ -1,0 +1,7 @@
+[package]
+name = "mosaic-basic-theme"
+version = "0.1.0"
+entrypoint = "lib.typ"
+description = "A Mosaic theme replicating the basicwhite Beamer theme, with white/black/gray/obu variants"
+authors = ["Randy Ridenour"]
+license = "MIT"

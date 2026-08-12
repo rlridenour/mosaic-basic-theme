@@ -1,0 +1,156 @@
+# mosaic-basic-theme
+
+A [Mosaic](https://github.com/vincentarelbundock/mosaic) theme for Typst
+presentations that replicates
+[`touying-basic-theme`](https://github.com/rlridenour/touying-basic-theme),
+which in turn replicates the `basicwhite` Beamer theme.
+
+Sans-serif type, bold titles in the accent color, a body centered in
+whatever room the title leaves, and no chrome at all — no slide numbers,
+no footer, no progress indicator, no rules.
+
+Rendered side by side against the Touying original, the title and
+section slides are pixel-identical and the content slide's body sits
+within 3px; every text run measures the same width. See
+[Fidelity](#fidelity).
+
+## Install
+
+The package resolves as `@local/mosaic-basic-theme:0.1.0` via a symlink,
+the same way the Touying theme does:
+
+```sh
+mkdir -p ~/Library/Application\ Support/typst/packages/local/mosaic-basic-theme
+ln -sfn "$PWD/mosaic-basic-theme" \
+  ~/Library/Application\ Support/typst/packages/local/mosaic-basic-theme/0.1.0
+```
+
+Mosaic itself needs no install — Typst fetches `@preview/mosaic:0.0.1`
+on first compile.
+
+## Usage
+
+```typ
+#import "@local/mosaic-basic-theme:0.1.0" as m
+
+#show: m.setup.with(
+  title: [A Basic Talk],
+  subtitle: [A subtitle],
+  authors: [Randy Ridenour],
+  date: [August 1, 2026],
+)
+
+#m.slide(layout: "title")
+
+= First Section
+
+== A bulleted slide
+
+- First point
+- Second point
+```
+
+A level-one heading opens a section slide and a level-two heading a
+content slide, which is Mosaic's own model and matches the Touying
+theme's default `slide-level: 2`.
+
+Everything else is ordinary Mosaic: `m.slide`, `m.note`, `m.steps`,
+`m.components`, `m.grids`, `m.surface`, and `m.fit` are re-exported from
+Mosaic unchanged, so any Mosaic documentation applies.
+
+### Variants
+
+The Touying theme's four variants are palettes here, which is Mosaic's
+own spelling for a change of polarity:
+
+```typ
+#show: m.setup.with(colors: m.variants.black, ..)
+```
+
+| Variant | Canvas | Text | Accent |
+| --- | --- | --- | --- |
+| `white` (default) | white | black | black |
+| `black` | black | white | white |
+| `gray` | `#eeeeee` | black | black |
+| `obu` | white | black | OBU green |
+
+Each is a plain dictionary, so tuning one is addition:
+`m.variants.white + (accent: rgb("#b91c1c"))`. Mosaic's own curated
+palettes remain available as `m.palettes`.
+
+### The title slide's logo
+
+The title page is a two-column grid — text in the left 60%, an optional
+logo centered in the right 40%. Fill the logo cell on the title slide:
+
+```typ
+#m.slide(layout: "title", cells: (title-logo: image("logos/univ.png", width: 90%)))
+```
+
+Left alone the cell is empty and the text simply keeps the left 60%,
+which is what the Beamer theme does without a logo.
+
+## Authoring in Org
+
+[`ox-rlr-mosaic`](https://github.com/rlridenour/ox-rlr-mosaic) drives
+this theme with no changes — point its package keyword at the theme and
+omit `#+MOSAIC_THEME:`, which selects a *bundled* Mosaic facade:
+
+```org
+#+TITLE: A Basic Talk
+#+AUTHOR: Randy Ridenour
+#+MOSAIC_PACKAGE: @local/mosaic-basic-theme:0.1.0
+#+MOSAIC_COLORS: m.variants.obu
+```
+
+## Fidelity
+
+Measured against the Touying original at 70ppi, same content, same page
+(841.89 × 473.563pt), comparing the bounding box of every text line:
+
+| Slide | Result |
+| --- | --- |
+| Title | identical — every line matches in position and width |
+| Section | identical |
+| Content | widths identical; body 2–3px lower |
+
+Mean deviation is 0.9px per text line.
+
+Three findings from that comparison are worth recording, because they
+are places where the Touying theme's source and its output disagree.
+This theme matches the **output**, since that is what a replica is for.
+
+- **The frame title renders at body size**, not the `1.2em` its source
+  asks for. The same is true of the section heading's `1.4em`. Both `em`
+  values are resolved where the theme is defined rather than inside a
+  slide, so neither reaches the deck's 25pt. In both themes the title is
+  set apart by weight and color rather than by scale.
+- **The title page's byline and date are one size** (0.8em). No stock
+  Mosaic title variant can reproduce that — each scales the byline
+  (0.7) and the date (0.62) apart — which is why the title page here is
+  a grid composed from `info()` rather than a configured title layout.
+- **Mosaic insets edge cells at 0.55× vertically**, by design, so a
+  one-line header band is not deeper than the text it carries. That puts
+  the frame title higher than Beamer's flat 2em margin, so the header
+  cell is padded down by 23pt and pulled back by the same amount, which
+  restores the title's position without taking the space from the body.
+
+## Layout
+
+- `mosaic-basic-theme/` — the package.
+  - `lib.typ` — the facade: binds `setup`, re-exports Mosaic's API.
+  - `definition.typ` — the design: typography, cell rules, the composed
+    title page.
+  - `layouts.typ` — the callable layout namespace.
+  - `tokens.typ` — the four variant palettes.
+- `examples/demo.typ` — a deck exercising the theme.
+
+## Differences from the Touying theme
+
+- **No subsection slides.** Mosaic's heading model is two levels: `=` is
+  a section, `==` is a slide. The Touying theme's `slide-level: 3`
+  arrangement, where `==` is a subsection, has no equivalent.
+- **Speaker notes are Mosaic's**, written with `m.note[..]`, and the
+  presenter outputs are Mosaic's `speaker`, `notes`, and `split`.
+- **Incremental reveals are Mosaic's** `m.steps`, not Touying's
+  `#pause`.
