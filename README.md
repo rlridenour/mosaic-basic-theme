@@ -91,14 +91,28 @@ palettes remain available as `m.palettes`.
 ### The title slide's logo
 
 The title page is a two-column grid — text in the left 60%, an optional
-logo centered in the right 40%. Fill the logo cell on the title slide:
+logo centered in the right 40%. Give it one on `setup`:
+
+```typ
+#show: m.setup.with(logo: image("logos/univ.png", width: 90%), ..)
+```
+
+Left alone the half is empty and the text simply keeps the left 60%,
+which is what the Beamer theme does without a logo.
+
+Setting it per slide works too, and is what you want if a deck has more
+than one title slide:
 
 ```typ
 #m.slide(layout: "title", cells: (title-logo: image("logos/univ.png", width: 90%)))
 ```
 
-Left alone the cell is empty and the text simply keeps the left 60%,
-which is what the Beamer theme does without a logo.
+Note that `cells:` does **not** work for this on `setup`. A deck's
+`cells:` replaces the theme's outright rather than merging key by key,
+so `setup(cells: (title-logo: ..))` would take the composed title text
+down with it and leave a slide holding nothing but a logo. That
+asymmetry is why the logo is an option: per slide, `cells:` overrides
+one ID at a time and is the right tool; deck-wide, it is not.
 
 ## Presenting
 
@@ -137,7 +151,12 @@ omit `#+MOSAIC_THEME:`, which selects a *bundled* Mosaic facade:
 #+AUTHOR: Randy Ridenour
 #+MOSAIC_PACKAGE: @local/mosaic-basic-theme:0.1.0
 #+MOSAIC_COLORS: m.variants.obu
+#+MOSAIC_SETUP: logo: image("logos/univ.png", width: 90%)
 ```
+
+`#+MOSAIC_SETUP:` passes an argument straight to `setup`, which is how
+the logo and any other theme option are reached from Org. Paths there
+resolve against the exported `.typ`, which sits beside the `.org`.
 
 For the presenter console, add `#+MOSAIC_OUTPUT: split`.
 

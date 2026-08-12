@@ -72,6 +72,15 @@
   show label("basic-title-line"): set text(fill: colors.accent)
   show label("mosaic-cell-title-text"): set align(left + horizon)
   show label("mosaic-cell-title-logo"): set align(center + horizon)
+  // `setup(logo: ..)` fills the logo half. It arrives as an option rather
+  // than as a `cells` default because a deck's own `cells:` replaces the
+  // theme's outright, which would take the composed title text with it; an
+  // option is merged key by key and so survives.
+  show label("mosaic-cell-title-logo"): it => if options.logo == none {
+    it
+  } else {
+    options.logo
+  }
 
   // Speaker notes, as they appear in the `speaker`, `notes`, and `split`
   // outputs. Mosaic sizes them for a printed A4 companion, at 10pt, which is
@@ -137,6 +146,9 @@
   options: (
     font: ("SF Pro", "Helvetica Neue", "Arial", "Fira Sans", "DejaVu Sans"),
     base-size: 25pt,
+    // The title page's logo, centered in its right 40%. `none` leaves the
+    // half empty and the text keeps the left 60%, as the Beamer theme does.
+    logo: none,
   ),
   layouts: (
     content: layouts.content(),
