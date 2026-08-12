@@ -1,5 +1,10 @@
 // A deck exercising the Basic theme. Swap the palette on the setup call
 // to see the other variants: m.variants.black, .gray, or .obu.
+//
+// Add `output: "split"` to the setup call for the presenter console --
+// every frame beside its notes on a double-width page, which pympress
+// splits automatically and pdfpc splits with `--notes=right`. The
+// `speaker` and `notes` outputs print the same notes on A4 instead.
 #import "@local/mosaic-basic-theme:0.1.0" as m
 
 #show: m.setup.with(

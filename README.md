@@ -16,8 +16,15 @@ within 3px; every text run measures the same width. See
 
 ## Install
 
-The package resolves as `@local/mosaic-basic-theme:0.1.0` via a symlink,
-the same way the Touying theme does:
+This theme builds on **Mosaic 0.0.2**, which is the development version
+and is not on Typst Universe, so it has to be installed first:
+
+```sh
+git clone https://github.com/vincentarelbundock/mosaic.git
+cd mosaic && make install
+```
+
+Then symlink this theme, the same way the Touying theme is installed:
 
 ```sh
 mkdir -p ~/Library/Application\ Support/typst/packages/local/mosaic-basic-theme
@@ -25,8 +32,11 @@ ln -sfn "$PWD/mosaic-basic-theme" \
   ~/Library/Application\ Support/typst/packages/local/mosaic-basic-theme/0.1.0
 ```
 
-Mosaic itself needs no install — Typst fetches `@preview/mosaic:0.0.1`
-on first compile.
+0.0.2 is what brings the presenter console — see
+[Presenting](#presenting). Pin `@preview/mosaic:0.0.1` in the three
+`.typ` files under `mosaic-basic-theme/` if you would rather have a
+theme that needs no local install; everything except the console
+outputs works there too.
 
 ## Usage
 
@@ -90,6 +100,32 @@ logo centered in the right 40%. Fill the logo cell on the title slide:
 Left alone the cell is empty and the text simply keeps the left 60%,
 which is what the Beamer theme does without a logo.
 
+## Presenting
+
+Mosaic 0.0.2's outputs all work with this theme:
+
+```typ
+#show: m.setup.with(output: "split", ..)    // slide beside its notes
+#show: m.setup.with(output: "speaker", ..)  // printed: thumbnail + notes
+#show: m.setup.with(output: "notes", ..)    // printed: notes alone
+```
+
+`split` puts every frame on a double-width page — the slide at true size
+on the left, its notes on the right — which
+[pympress](https://pympress.xyz/) splits automatically and
+[pdfpc](https://pdfpc.github.io/) splits with `--notes=right`. Write
+notes with `m.note[..]`.
+
+The theme sizes the notes at 16pt rather than leaving Mosaic's 10pt,
+which is set for a printed A4 companion and is too small to read off a
+laptop while presenting. It also restates the note body's weight, since
+Mosaic's bold heading rule otherwise carries into the body and renders
+the whole notes half bold. Override either with an ordinary rule after
+`setup`.
+
+The notes half stays black on white whatever variant the deck carries,
+which is the polarity you want under house lights.
+
 ## Authoring in Org
 
 [`ox-rlr-mosaic`](https://github.com/rlridenour/ox-rlr-mosaic) drives
@@ -102,6 +138,8 @@ omit `#+MOSAIC_THEME:`, which selects a *bundled* Mosaic facade:
 #+MOSAIC_PACKAGE: @local/mosaic-basic-theme:0.1.0
 #+MOSAIC_COLORS: m.variants.obu
 ```
+
+For the presenter console, add `#+MOSAIC_OUTPUT: split`.
 
 ## Fidelity
 
@@ -151,6 +189,8 @@ This theme matches the **output**, since that is what a replica is for.
   a section, `==` is a slide. The Touying theme's `slide-level: 3`
   arrangement, where `==` is a subsection, has no equivalent.
 - **Speaker notes are Mosaic's**, written with `m.note[..]`, and the
-  presenter outputs are Mosaic's `speaker`, `notes`, and `split`.
+  presenter outputs are Mosaic's `speaker`, `notes`, and `split` — see
+  [Presenting](#presenting). The Touying theme has its own note
+  machinery and a second-screen view built on Touying's.
 - **Incremental reveals are Mosaic's** `m.steps`, not Touying's
   `#pause`.

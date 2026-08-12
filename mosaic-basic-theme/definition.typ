@@ -7,7 +7,7 @@
 // rules. Everything the deck says is in the type.
 //
 // The engine emits no typography of its own, so this states the whole look.
-#import "@preview/mosaic:0.0.1": info
+#import "@local/mosaic:0.0.2": info
 #import "layouts.typ" as layouts
 #import "tokens.typ"
 
@@ -72,6 +72,16 @@
   show label("basic-title-line"): set text(fill: colors.accent)
   show label("mosaic-cell-title-text"): set align(left + horizon)
   show label("mosaic-cell-title-logo"): set align(center + horizon)
+
+  // Speaker notes, as they appear in the `speaker`, `notes`, and `split`
+  // outputs. Mosaic sizes them for a printed A4 companion, at 10pt, which is
+  // too small to read off a laptop while presenting; and its bold heading
+  // rule carries into the note body, so the whole notes half comes out bold
+  // unless the weight is stated again. Both are restated here rather than
+  // left to every deck. The notes half is paper, not slide canvas, so it
+  // keeps its own black-on-white whatever palette the deck carries.
+  show label("mosaic-note-heading"): set text(size: 16pt)
+  show label("mosaic-note-body"): set text(size: 16pt, weight: "regular")
 
   // The section slide: one bold heading in the accent color, centered both
   // ways, on an otherwise blank slide.

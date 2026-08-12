@@ -1,7 +1,7 @@
 // Callable Basic layout namespace: base Mosaic layouts with Basic's defaults.
 // The facade and the definition share these, so an explicit
 // `m.layouts.content()` call builds the same slide an automatic heading does.
-#import "@preview/mosaic:0.0.1" as mosaic
+#import "@local/mosaic:0.0.2" as mosaic
 
 // Header and body only. The Touying theme draws no footer, and the frame
 // title is the first thing in the slide rather than page furniture, so the
